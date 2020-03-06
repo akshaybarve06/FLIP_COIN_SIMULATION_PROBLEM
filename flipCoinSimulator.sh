@@ -119,16 +119,21 @@ function tripletCombination()
 	THTpercentage=`expr "scale=2; ${tripletDict[THT]} * 100 / $flips" | bc`
 
 }
-singletCombination
-echo ${singletDict[@]}
-echo ${!singletDict[@]}
-flips=0
 
-doubletCombination
-echo ${doubletDict[@]}
-echo ${!doubletDict[@]}
-flips=0
+function showResult()
+{
+	singletCombination
+	echo ${singletDict[@]}
+	echo ${!singletDict[@]}
+	flips=0
 
-tripletCombination
-echo ${tripletDict[@]}
-echo ${!tripletDict[@]}
+	doubletCombination
+	echo ${doubletDict[@]}
+	echo ${!doubletDict[@]}
+	flips=0
+
+	tripletCombination
+	echo ${tripletDict[@]}
+	echo ${!tripletDict[@]}
+}
+showResult
