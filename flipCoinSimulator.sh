@@ -5,13 +5,9 @@
 # @Version : 18.04.3 lts
 # @Since : 06 March 2020 / Friday
 
-declare -A singletDict
-declare -A doubletDict
-declare -A tripletDict
+declare -A combinations
 
-singletDict=(["H"]=0 ["T"]=0)
-doubletDict=(["HH"]=0 ["HT"]=0 ["TT"]=0 ["TH"]=0)
-tripletDict=(["HHH"]=0 ["HHT"]=0 ["HTT"]=0 ["HTH"]=0 ["THH"]=0 ["THT"]=0 ["TTH"]=0 ["TTT"]=0)
+combinations=(["H"]=0 ["T"]=0 ["HH"]=0 ["HT"]=0 ["TT"]=0 ["TH"]=0 ["HHH"]=0 ["HHT"]=0 ["HTT"]=0 ["HTH"]=0 ["THH"]=0 ["THT"]=0 ["TTH"]=0 ["TTT"]=0)
 
 noOfFlips=30
 coinOutput=O
@@ -34,14 +30,16 @@ function singletCombination()
 		headOrTail
 		if [[ $coinOutput == H ]]
 		then
-			singletDict[H]=$((${singletDict[H]}+1 ))
+			combinations[H]=$((${combinations[H]}+1 ))
 		else
-			singletDict[T]=$((${singletDict[T]}+1 ))
+			combinations[T]=$((${combinations[T]}+1 ))
 		fi
 		((flips++))
 	done
-	headPercentage=`expr "scale=2; ${singletDict[H]} * 100 / $noOfFlips" | bc`
-	tailPercentage=`expr "scale=2; ${singletDict[T]} * 100 / $noOfFlips" | bc`
+	headPercentage=`expr "scale=2; ${combinations[H]} * 100 / $noOfFlips" | bc`
+	tailPercentage=`expr "scale=2; ${combinations[T]} * 100 / $noOfFlips" | bc`
+
+flips=0
 }
 
 function doubletCombination()
@@ -49,91 +47,92 @@ function doubletCombination()
 	while [[ $flips -lt $noOfFlips ]]
 	do
 		headOrTail
-		temp1=$coinOutput
+		output1=$coinOutput
 		headOrTail
-		temp2=$coinOutput
-		if [[ $temp1$temp2 == HH ]]
+		output2=$coinOutput
+		if [[ $output1$output2 == HH ]]
 		then
-			doubletDict[HH]=$((${doubletDict[HH]}+1))
-		elif [[ $temp1$temp2 == HT ]]
+			combinations[HH]=$((${combinations[HH]}+1))
+		elif [[ $output1$output2 == HT ]]
 		then
-			doubletDict[HT]=$((${doubletDict[HT]}+1))
-		elif [[ $temp1$temp2 == TT ]]
+			combinations[HT]=$((${combinations[HT]}+1))
+		elif [[ $output1$output2 == TT ]]
 		then
-			doubletDict[TT]=$((${doubletDict[TT]}+1))
-		elif [[ $temp1$temp2 == TH ]]
+			combinations[TT]=$((${combinations[TT]}+1))
+		elif [[ $output1$output2 == TH ]]
    	then
-      	doubletDict[TH]=$((${doubletDict[TH]}+1))
+      	combinations[TH]=$((${combinations[TH]}+1))
 		fi
 		((flips++))
 	done
-	HHpercentage=`expr "scale=2; ${doubletDict[HH]} * 100 / $flips" | bc`
-	HTpercentage=`expr "scale=2; ${doubletDict[HT]} * 100 / $flips" | bc`
-	TTpercentage=`expr "scale=2; ${doubletDict[TT]} * 100 / $flips" | bc`
-	THpercentage=`expr "scale=2; ${doubletDict[TH]} * 100 / $flips" | bc`
+	HHpercentage=`expr "scale=2; ${combinations[HH]} * 100 / $flips" | bc`
+	HTpercentage=`expr "scale=2; ${combinations[HT]} * 100 / $flips" | bc`
+	TTpercentage=`expr "scale=2; ${combinations[TT]} * 100 / $flips" | bc`
+	THpercentage=`expr "scale=2; ${combinations[TH]} * 100 / $flips" | bc`
+
+flips=0
 }
 function tripletCombination()
 {
 	while [[ $flips -lt $noOfFlips ]]
 	do
 		headOrTail
-		temp1=$coinOutput
+		output1=$coinOutput
 		headOrTail
-		temp2=$coinOutput
+		output2=$coinOutput
 		headOrTail
-		temp3=$coinOutput
-		if [[ $temp1$temp2$temp3 == HHH ]]
+		output3=$coinOutput
+		if [[ $output1$output2$output3 == HHH ]]
 		then
-			tripletDict[HHH]=$((${tripletDict[HHH]}+1))
-		elif [[ $temp1$temp2$temp3 == HHT ]]
+			combinations[HHH]=$((${combinations[HHH]}+1))
+		elif [[ $output1$output2$output3 == HHT ]]
 		then
-			tripletDict[HHT]=$((${tripletDict[HHT]}+1))
-		elif [[ $temp1$temp2$temp3 == HTT ]]
+			combinations[HHT]=$((${combinations[HHT]}+1))
+		elif [[ $output1$output2$output3 == HTT ]]
 		then
-			tripletDict[HTT]=$((${tripletDict[HTT]}+1))
-		elif [[ $temp1$temp2$temp3 == HTH ]]
+			combinations[HTT]=$((${combinations[HTT]}+1))
+		elif [[ $output1$output2$output3 == HTH ]]
 		then
-			tripletDict[HTH]=$((${tripletDict[HTH]}+1))
-		elif [[ $temp1$temp2$temp3 == THH ]]
+			combinations[HTH]=$((${combinations[HTH]}+1))
+		elif [[ $output1$output2$output3 == THH ]]
 		then
-			tripletDict[THH]=$((${tripletDict[THH]}+1))
-		elif [[ $temp1$temp2$temp3 == TTH ]]
+			combinations[THH]=$((${combinations[THH]}+1))
+		elif [[ $output1$output2$output3 == TTH ]]
 		then
-			tripletDict[TTH]=$((${tripletDict[TTH]}+1))
-		elif [[ $temp1$temp2$temp3 == THT ]]
+			combinations[TTH]=$((${combinations[TTH]}+1))
+		elif [[ $output1$output2$output3 == THT ]]
 		then
-			tripletDict[THT]=$((${tripletDict[THT]}+1))
-		elif [[ $temp1$temp2$temp3 == TTT ]]
+			combinations[THT]=$((${combinations[THT]}+1))
+		elif [[ $output1$output2$output3 == TTT ]]
 		then
-			tripletDict[TTT]=$((${tripletDict[TTT]}+1))
+			combinations[TTT]=$((${combinations[TTT]}+1))
 		fi
 		((flips++))
 	done
-	HHHpercentage=`expr "scale=2; ${tripletDict[HHH]} * 100 / $flips" | bc`
-	HHTpercentage=`expr "scale=2; ${tripletDict[HHT]} * 100 / $flips" | bc`
-	HTTpercentage=`expr "scale=2; ${tripletDict[HTT]} * 100 / $flips" | bc`
-	HTHpercentage=`expr "scale=2; ${tripletDict[HTH]} * 100 / $flips" | bc`
-	THHpercentage=`expr "scale=2; ${tripletDict[THH]} * 100 / $flips" | bc`
-	TTHpercentage=`expr "scale=2; ${tripletDict[TTH]} * 100 / $flips" | bc`
-	TTTpercentage=`expr "scale=2; ${tripletDict[TTT]} * 100 / $flips" | bc`
-	THTpercentage=`expr "scale=2; ${tripletDict[THT]} * 100 / $flips" | bc`
+	HHHpercentage=`expr "scale=2; ${combinations[HHH]} * 100 / $flips" | bc`
+	HHTpercentage=`expr "scale=2; ${combinations[HHT]} * 100 / $flips" | bc`
+	HTTpercentage=`expr "scale=2; ${combinations[HTT]} * 100 / $flips" | bc`
+	HTHpercentage=`expr "scale=2; ${combinations[HTH]} * 100 / $flips" | bc`
+	THHpercentage=`expr "scale=2; ${combinations[THH]} * 100 / $flips" | bc`
+	TTHpercentage=`expr "scale=2; ${combinations[TTH]} * 100 / $flips" | bc`
+	TTTpercentage=`expr "scale=2; ${combinations[TTT]} * 100 / $flips" | bc`
+	THTpercentage=`expr "scale=2; ${combinations[THT]} * 100 / $flips" | bc`
 
+flips=0
 }
 
 function showResult()
 {
 	singletCombination
-	echo ${singletDict[@]}
-	echo ${!singletDict[@]}
-	flips=0
+	echo H T
+	echo ${combinations["H"]} ${combinations["T"]}
 
 	doubletCombination
-	echo ${doubletDict[@]}
-	echo ${!doubletDict[@]}
-	flips=0
+	echo HH HT TH TT
+	echo ${combinations["HH"]} ${combinations["HT"]} ${combinations["TH"]} ${combinations["TT"]}
 
 	tripletCombination
-	echo ${tripletDict[@]}
-	echo ${!tripletDict[@]}
+	echo HHH HHT HTH HTT THH THT TTH TTT
+	echo ${combinations["HHH"]} ${combinations["HHT"]} ${combinations["HTH"]} ${combinations["HTT"]} ${combinations["THH"]} ${combinations["THT"]} ${combinations["TTH"]} ${combinations["TTT"]}
 }
 showResult
